@@ -12,6 +12,7 @@
 		52B883B720DCDF6D0031C029 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B883B520DCDF6D0031C029 /* Main.storyboard */; };
 		52B883B920DCDF6D0031C029 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52B883B820DCDF6D0031C029 /* Assets.xcassets */; };
 		52B883BC20DCDF6D0031C029 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B883BA20DCDF6D0031C029 /* LaunchScreen.storyboard */; };
+		52BDD33720DD441A00F2D12E /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BDD33620DD441A00F2D12E /* LoginController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		52B883B820DCDF6D0031C029 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		52B883BB20DCDF6D0031C029 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		52B883BD20DCDF6D0031C029 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52BDD33620DD441A00F2D12E /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +56,31 @@
 		52B883B020DCDF6D0031C029 /* ChatMate */ = {
 			isa = PBXGroup;
 			children = (
-				52B883B120DCDF6D0031C029 /* AppDelegate.swift */,
-				52B883B320DCDF6D0031C029 /* ViewController.swift */,
+				52BDD33520DD407500F2D12E /* Controllers */,
+				52BDD33420DD406600F2D12E /* Supporting Files */,
 				52B883B520DCDF6D0031C029 /* Main.storyboard */,
-				52B883B820DCDF6D0031C029 /* Assets.xcassets */,
 				52B883BA20DCDF6D0031C029 /* LaunchScreen.storyboard */,
-				52B883BD20DCDF6D0031C029 /* Info.plist */,
 			);
 			path = ChatMate;
+			sourceTree = "<group>";
+		};
+		52BDD33420DD406600F2D12E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				52B883B120DCDF6D0031C029 /* AppDelegate.swift */,
+				52B883B820DCDF6D0031C029 /* Assets.xcassets */,
+				52B883BD20DCDF6D0031C029 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		52BDD33520DD407500F2D12E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				52B883B320DCDF6D0031C029 /* ViewController.swift */,
+				52BDD33620DD441A00F2D12E /* LoginController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52B883B420DCDF6D0031C029 /* ViewController.swift in Sources */,
+				52BDD33720DD441A00F2D12E /* LoginController.swift in Sources */,
 				52B883B220DCDF6D0031C029 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +320,7 @@
 				52B883C220DCDF6D0031C029 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
