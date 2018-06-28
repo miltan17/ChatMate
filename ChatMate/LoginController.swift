@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginController: UIViewController {
 
+    // MARK:- INITIALIZE VIEWS
     let inputContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -63,6 +65,9 @@ class LoginController: UIViewController {
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.layer.cornerRadius = 5
+        
+        button.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
+        
         return button
     }()
     
@@ -75,25 +80,13 @@ class LoginController: UIViewController {
         return sc
     }()
     
-    func handleLoginRegisterChange(){
-        let title = loginRegisterSegmentedControl.titleForSegment(at: loginRegisterSegmentedControl.selectedSegmentIndex)
-        loginRegisterButton.setTitle(title, for: .normal)
-        
-        inputContainerViewHeightConstraint?.constant = loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 100 : 150;
-        
-        nameTextFieldHeightConstraint?.isActive = false
-        nameTextFieldHeightConstraint = nameTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 0 : 1/3)
-        nameTextFieldHeightConstraint?.isActive = true
-        
-        emailTextFieldHeightConstraint?.isActive = false
-        emailTextFieldHeightConstraint = emailTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
-        emailTextFieldHeightConstraint?.isActive = true
-
-        passwordTextFieldHeightConstraint?.isActive = false
-        passwordTextFieldHeightConstraint = passwordTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
-        passwordTextFieldHeightConstraint?.isActive = true
-    }
     
+    var inputContainerViewHeightConstraint: NSLayoutConstraint?
+    var nameTextFieldHeightConstraint: NSLayoutConstraint?
+    var emailTextFieldHeightConstraint: NSLayoutConstraint?
+    var passwordTextFieldHeightConstraint: NSLayoutConstraint?
+
+    // MARK:- LOAD VIEW
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(r: 61, g: 91, b: 151)
@@ -111,6 +104,62 @@ class LoginController: UIViewController {
         return .lightContent
     }
     
+    // MARK:- HANDLE LOGIN REGISTER
+    
+    func handleLoginRegister(){
+        
+        handleRegister()
+    }
+    
+    func handleRegister(){
+        guard let email = emailTextfield.text, let password = passwordTextfield.text, let name = nameTextfield.text else {
+            
+            print("Value not found")
+            return
+        }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+            
+            if(error != nil){
+                return
+            }
+            guard let uid = user?.uid else{
+                return
+            }
+            let ref = Database.database().reference(fromURL: "https://chatmate-3874f.firebaseio.com/")
+            let userReference = ref.child("users").child(uid)
+            let values = ["name": name, "email": email]
+            userReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                
+                if(err != nil){
+                    return
+                }
+                print("Data Saved Successfully")
+            })
+        }
+        
+        
+    }
+    
+    func handleLoginRegisterChange(){
+        let title = loginRegisterSegmentedControl.titleForSegment(at: loginRegisterSegmentedControl.selectedSegmentIndex)
+        loginRegisterButton.setTitle(title, for: .normal)
+        
+        inputContainerViewHeightConstraint?.constant = loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 100 : 150;
+        
+        nameTextFieldHeightConstraint?.isActive = false
+        nameTextFieldHeightConstraint = nameTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 0 : 1/3)
+        nameTextFieldHeightConstraint?.isActive = true
+        
+        emailTextFieldHeightConstraint?.isActive = false
+        emailTextFieldHeightConstraint = emailTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
+        emailTextFieldHeightConstraint?.isActive = true
+        
+        passwordTextFieldHeightConstraint?.isActive = false
+        passwordTextFieldHeightConstraint = passwordTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
+        passwordTextFieldHeightConstraint?.isActive = true
+    }
+    //MARK:- SETUP CONSTRAINTS TO VIEWS
     func setupLoginRegisterSegmentedControl(){
         loginRegisterSegmentedControl.centerXAnchor.constraint(equalTo: inputContainerView.centerXAnchor).isActive = true
         loginRegisterSegmentedControl.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: -12).isActive = true
@@ -124,10 +173,6 @@ class LoginController: UIViewController {
         loginRegisterButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
         loginRegisterButton.heightAnchor.constraint(equalToConstant: 45)
     }
-    
-    var inputContainerViewHeightConstraint: NSLayoutConstraint?
-    var nameTextFieldHeightConstraint: NSLayoutConstraint?
-    var emailTextFieldHeightConstraint: NSLayoutConstraint?
     
     func setInputContainerView(){
         inputContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -179,7 +224,6 @@ class LoginController: UIViewController {
         emailSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
-    var passwordTextFieldHeightConstraint: NSLayoutConstraint?
     func setupPasswordTextField(){
         passwordTextfield.topAnchor.constraint(equalTo: emailTextfield.bottomAnchor).isActive = true
         passwordTextfield.leftAnchor.constraint(equalTo: inputContainerView.leftAnchor, constant: 5).isActive = true
@@ -187,7 +231,6 @@ class LoginController: UIViewController {
         passwordTextFieldHeightConstraint = passwordTextfield.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 1/3)
         passwordTextFieldHeightConstraint?.isActive = true
     }
-    
 }
 
 extension UIColor{
